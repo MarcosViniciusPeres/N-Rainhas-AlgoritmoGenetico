@@ -3,7 +3,6 @@ from EstadoTabuleiroGA import EstadoTabuleiroGA
 import time
 import sys
 
-
 tempoInicial = 0    
 qtdeRainhas = 0 
 qtdeGeracoes = 0
@@ -15,6 +14,7 @@ MAX_INT = sys.maxsize
 def tempoAtualMili():
     return round(time.time() * 1000)
 
+#Assumimos que deve ser um valor par e que deve ter pelo menos 2 a menos que o tamanho da população inicial
 def populaValoresValidosQtdeCruzamento(valoresValidosQtdeCruzamento, qtdePopInicial):
     valorAdimissivel = int((qtdePopInicial/2))
     for valorAdimissivel in range(valorAdimissivel,qtdePopInicial):
@@ -53,6 +53,7 @@ def melhorIndividuoAteAgora(popInicial, melhorFitnessAtual):
     else: 
         return None
 
+#realiza cópia de um tabuleiro em uma nova posição de memória
 def copiaRegistro(origem):
     novoReg = EstadoTabuleiroGA(qtdeRainhas)
 
@@ -62,21 +63,25 @@ def copiaRegistro(origem):
     novoReg.setTabuleiro(origem.getTabuleiro())
 		
     return novoReg
-    
+
+#realiza a operação de seleção de individuos
 def selecionaIndividuos(popInicial):
     indivSelecionados = []
     probTotal = 0
 
+    #setando probabilidade local de cada estado e obtendo a probabilidade geral de todos os estados
     for indice in range(len(popInicial)):
         aptidao = popInicial[indice].getValorFitness()
         propLocal = ((aptidao - 100) * - 1)
         popInicial[indice].setPropLocal(propLocal)
         probTotal += propLocal
 
+    #setando percentual de aptidão para ser escolhido
     for indice in range(len(popInicial)):
         probLocal = popInicial[indice].getPropLocal()
         popInicial[indice].setPercAptidao(probLocal / probTotal)
 
+    #realizando escolha de modo aleatório através da técnica de PROBABILIDADE ACUMULADA
     for qtde in range (qtdeMaxSelecao):
         percRandom = random.random()
         percAcumulada = 0
@@ -92,9 +97,12 @@ def selecionaIndividuos(popInicial):
                 
     return indivSelecionados
 
+#realiza a operação de crossover/cruzamento
 def cruzamentoDeIndividuos(popSelecionada):
     filhosCruzados = []
 
+
+    #trecho abaixo selecionará o ponto de corte e obterá gene dos pais para realizar crossover
     for pai1 in range(len(popSelecionada)-1):
         pai2 = (pai1 + 1)
         posicaoDeCorte = random.randint(0,  qtdeRainhas-1)
@@ -105,11 +113,13 @@ def cruzamentoDeIndividuos(popSelecionada):
         genesPai1 = popSelecionada[pai1].getTabuleiro()
         genesPai2 = popSelecionada[pai2].getTabuleiro()
 
+        #realizando crossover, ou seja, trocando parte dos genes dos pais para em seguida gerar filhos
         for posicao in range(posicaoDeCorte):
             linha = genesPai1[posicao]
             genesPai1[posicao] = genesPai2[posicao]
             genesPai2[posicao] = linha
         
+        #setando novos dados dos pais que foram cruzados nos filhos
         filhoCruzado1.setTabuleiro(genesPai1)
         filhoCruzado2.setTabuleiro(genesPai2)
         filhosCruzados.append(filhoCruzado1)
@@ -118,27 +128,35 @@ def cruzamentoDeIndividuos(popSelecionada):
         pai1 += 1
     
     return filhosCruzados
-    
+
+#atualiza população inicial com os novos filhos otimizados usando ELITISMO
+#1 dos pais será inserido aleatoriamente, dando chance a manter pais ruins e possivelmente gerar filhos melhores a partir dele futuramente
 def atualizaPopInicial(popInicial, filhosGerados):
     novaPopInicial = []
 
+    #ordenando de casos bons até os ruins
     popInicial = sorted(popInicial, key= EstadoTabuleiroGA.getValorFitness)
     filhosGerados = sorted(filhosGerados, key= EstadoTabuleiroGA.getValorFitness)
 
+    #escolhendo pai aleatoriamente para continuar na população inicial
     paiRandomIndice = random.randint(0,  qtdePopInicial-1)
     paiRandom = copiaRegistro(popInicial[paiRandomIndice])
     novaPopInicial.append(paiRandom)
 
     qtdeAInserir = len(popInicial)
 
+    #inserindo regs do pai
     for indice in range(int((qtdeAInserir/2)-1)):
         novaPopInicial.append(popInicial[indice])
 
+    #inserindo regs dos filhos gerados a partir de cruzamentos
     for indice in range(int((qtdeAInserir/2))):
         novaPopInicial.append(filhosGerados[indice])
     
+    #resetando população inicial
     popInicial = []
 
+    #reinserindo dados na população inicial
     for indice in range(len(novaPopInicial)):
         estado = copiaRegistro(novaPopInicial[indice])
         estado.funcaoFitness()
