@@ -86,7 +86,7 @@ class EstadoTabuleiroGA:
         print("Impressao do resultado:")
         for linha in range(self.nRainhas):
             for coluna in range(self.nRainhas):
-                print(" R " if self.tabuleiro[linha][coluna] == True else " - ", end="")
+                print("[R]" if self.tabuleiro[linha][coluna] == True else "[ ]", end="")
             print("")
 
         print("\n\n--------------------------------------------------------------------------------------------------------------------\n\n")
