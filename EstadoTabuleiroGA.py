@@ -7,18 +7,18 @@ class EstadoTabuleiroGA:
     propLocal = 0
     percAptidao = 0
 
+    def setPropLocal(self, propLocal):
+        self.propLocal = propLocal
+
     def getPropLocal(self):
         return self.propLocal
     
-    def setPropLocal(self, propLocal):
-        self.propLocal = propLocal
+    def setPercAptidao(self, percAptidao):
+        self.percAptidao = percAptidao
 
     def getPercAptidao(self):
         return self.percAptidao
 
-    def setPercAptidao(self, percAptidao):
-        self.percAptidao = percAptidao
-    
     def setValorFitness(self, valorFitness):
         self.valorFitness = valorFitness
 
@@ -48,7 +48,7 @@ class EstadoTabuleiroGA:
         for linha in range(self.nRainhas):
             self.trocaPosicaoLinhas(linha, random.randint(0,  (self.nRainhas-1)))
 
-        self.funcaoFitness();
+        self.funcaoFitness()
 
 
     def funcaoFitness(self):
@@ -91,6 +91,6 @@ class EstadoTabuleiroGA:
 
         print("\n\n--------------------------------------------------------------------------------------------------------------------\n\n")
 
-        print("Solucao otima encontrada!" if self.energia == 0 else "Solucao otima nao encontrada!")
+        print("Solucao otima encontrada!" if self.valorFitness == 0 else "Solucao otima nao encontrada!")
 
 
