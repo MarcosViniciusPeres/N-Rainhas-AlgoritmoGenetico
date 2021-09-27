@@ -61,22 +61,21 @@ class EstadoTabuleiroGA:
 
     def validarColisao(self, linhaRainhaOrigem, colunaRainhaOrigem):
         qtdeConflitos = 0
+
         for linhaRainhaAtual in range(self.nRainhas):
             for colunaRainhaAtual in range(self.nRainhas):
-                
                 temRainha = self.tabuleiro[linhaRainhaAtual][colunaRainhaAtual]
                 
                 naoEhRainhaOrigem = (linhaRainhaAtual  != linhaRainhaOrigem and colunaRainhaAtual != colunaRainhaOrigem)
-                
                 estaNaLinhaColunaRainhaOrigem = (linhaRainhaAtual  == linhaRainhaOrigem or colunaRainhaAtual == colunaRainhaOrigem)
-
                 estaNaDiagonalRainhaOrigem = (linhaRainhaAtual + colunaRainhaAtual == linhaRainhaOrigem + colunaRainhaOrigem or linhaRainhaAtual - colunaRainhaAtual == linhaRainhaOrigem - colunaRainhaOrigem)
-
+                
                 if temRainha and ((naoEhRainhaOrigem and estaNaDiagonalRainhaOrigem) or (estaNaLinhaColunaRainhaOrigem and not naoEhRainhaOrigem and not estaNaDiagonalRainhaOrigem)):
                     qtdeConflitos += 1
-									
-		return qtdeConflitos			            
-						         
+        
+        return qtdeConflitos	
+        
+        		            				         
     def trocaPosicaoLinhas(self, n1, n2):
             linha = self.tabuleiro[n1]
             self.tabuleiro[n1] = self.tabuleiro[n2]

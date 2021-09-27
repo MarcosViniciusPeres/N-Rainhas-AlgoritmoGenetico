@@ -1,5 +1,13 @@
+from EstadoTabuleiroGA import EstadoTabuleiroGA
 import time
 import sys
+
+tempoInicial = 0    
+qtdeRainhas = 0 
+qtdeGeracoes = 0
+qtdePopInicial = 0
+qtdeMaxSelecao = 0
+valoresValidosQtdeCruzamento = []
 
 def tempoAtualMili():
     return round(time.time() * 1000)
@@ -10,7 +18,8 @@ def populaValoresValidosQtdeCruzamento(valoresValidosQtdeCruzamento, qtdePopInic
         if valorAdimissivel % 2 == 0 and ((valorAdimissivel + 2) <= qtdePopInicial):
             valoresValidosQtdeCruzamento.append(valorAdimissivel)
 
-def geraPopInicial(self, qtdeRainhas, tamanhoPopInicial):
+#método utilizado para geração de população inicial
+def geraPopInicial(qtdeRainhas):
     listEstados = []
 
     for i in range(qtdePopInicial):
@@ -19,12 +28,12 @@ def geraPopInicial(self, qtdeRainhas, tamanhoPopInicial):
 
     return listEstados
 
-tempoInicial = 0    
-qtdeRainhas = 0 
-qtdeGeracoes = 0
-qtdePopInicial = 0
-qtdeMaxSelecao = 0
-valoresValidosQtdeCruzamento = []
+def melhorIndividuoAteAgora(popInicial, melhorFitnessAtual):
+    popInicial = sorted(popInicial, key= EstadoTabuleiroGA.getValorFitness)
+
+    
+    
+    
 
 def main():
     global qtdeRainhas, qtdeGeracoes, qtdePopInicial, qtdeMaxSelecao
@@ -62,7 +71,7 @@ def main():
 
         MAX_INT = sys.maxsize
 
-        melhorFilho = melhorIndividuoAteAgora(geraPopInicial(qtdeRainhas, qtdePopInicial), MAX_INT)
+        melhorFilho = melhorIndividuoAteAgora(geraPopInicial(qtdeRainhas), MAX_INT)
 
         print("A execucao levou ", int((tempoAtualMili() - tempoInicial) / 1000), " segundos(s).")
         print("\n\n--------------------------------------------------------------------------------------------------------------------\n\n")
