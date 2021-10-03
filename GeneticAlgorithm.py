@@ -25,7 +25,7 @@ def populaValoresValidosQtdeCruzamento(valoresValidosQtdeCruzamento, qtdePopInic
 def geraPopInicial(qtdeRainhas):
     listEstados = []
 
-    for i in range(qtdePopInicial):
+    for _ in range(qtdePopInicial):
         novoEstado = EstadoTabuleiroGA(qtdeRainhas)    
         listEstados.append(novoEstado)
 
@@ -82,7 +82,7 @@ def selecionaIndividuos(popInicial):
         popInicial[indice].setPercAptidao(probLocal / probTotal)
 
     #realizando escolha de modo aleatório através da técnica de PROBABILIDADE ACUMULADA
-    for qtde in range (qtdeMaxSelecao):
+    for _ in range (qtdeMaxSelecao):
         percRandom = random.random()
         percAcumulada = 0
 
@@ -210,7 +210,7 @@ def main():
         while True:
             popInicial = geraPopInicial(qtdeRainhas)
             
-            for geracaoAtual in range(qtdeGeracoes):
+            for _ in range(qtdeGeracoes):
                 popSelecionada = selecionaIndividuos(popInicial)
                 filhosGerados = cruzamentoDeIndividuos(popSelecionada)
 
